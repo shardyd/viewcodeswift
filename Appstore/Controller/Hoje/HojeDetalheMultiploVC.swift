@@ -8,10 +8,20 @@
 import UIKit
 
 class HojeDetalheMultiploVC: UITableViewController {
-    
+
+    var hojeApp: HojeApp? {
+        didSet {
+            if let hojeApp = hojeApp {
+                let header = HojeMultiploHeader(frame: .init(x: 0, y: 0, width: view.bounds.width, height: 145))
+                header.hojeApp = hojeApp
+                tableView.tableHeaderView = header
+                tableView.reloadData()
+            }
+        }
+    }
+
     let cellId = "cellId"
-    
-    var hojeApp: HojeApp? = nil
+    var handlerClique: ((App) -> ())?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +40,13 @@ class HojeDetalheMultiploVC: UITableViewController {
         cell.leadingConstraints?.constant = 24
         cell.trailingConstraints?.constant = -24
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        if let app = self.hojeApp?.apps?[indexPath.item] {
+            
+            self.handlerClique?(app)
+        }
     }
 }
